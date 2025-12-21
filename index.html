@@ -199,20 +199,20 @@ function playKorobeiniki() {
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
   osc.connect(gain).connect(audioCtx.destination);
-  gain.gain.value = 0.2;
-  osc.type = 'sine';
+  gain.gain.value = 0.15;
+  osc.type = 'sawtooth'; // spacey sound
   osc.start();
 
-  // Frequencies for a simplified Korobeiniki melody (in Hz)
-  const melody = [
-    392, 392, 392, 587, 523, 493, 440, 392, // G G G D C B A G
-    587, 659, 698, 784, 784, 784, 784, 784, // D E F G G G G G
+  // Simple arpeggio pattern resembling space game music
+  const pattern = [
+    220, 277, 330, 415, 494, 587, 698, 830, // low to high
+    698, 587, 494, 415, 330, 277, 220, 247, // descending
   ];
-  const duration = 300; // ms per note
-  let idx = 0;
+  const duration = 120; // faster tempo
+  let i = 0;
   function playNote() {
-    osc.frequency.setValueAtTime(melody[idx % melody.length], audioCtx.currentTime);
-    idx++;
+    osc.frequency.setValueAtTime(pattern[i % pattern.length], audioCtx.currentTime);
+    i++;
     setTimeout(playNote, duration);
   }
   playNote();
