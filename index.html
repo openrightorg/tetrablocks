@@ -14,7 +14,8 @@
 <body>
   <canvas id="game" width="300" height="600"></canvas>
   <div id="info">
-    <span id="score">Score: 0</span>
+    <button id="startBtn">Start Game</button>
+    <span id="score" style="margin-left:20px;">Score: 0</span>
     <span id="next" style="margin-left:20px;">Next:</span>
   </div>
   <script>
@@ -165,7 +166,10 @@ function drop() {
   }
 }
 
+let gameStarted = false;
+
 function update() {
+  if (!gameStarted) return;
   const now = Date.now();
   if (now - lastDrop > dropInterval) {
     drop();
@@ -175,7 +179,8 @@ function update() {
   requestAnimationFrame(update);
 }
 
-document.addEventListener('keydown', e => {
+function handleKey(e) {
+  if (!gameStarted) return;
   if (e.key === 'ArrowLeft') {
     if (!collide(playfield, currentPiece, pos.x - 1, pos.y)) pos.x--;
   } else if (e.key === 'ArrowRight') {
@@ -184,6 +189,37 @@ document.addEventListener('keydown', e => {
     drop();
   } else if (e.key === 'ArrowUp') {
     rotatePiece();
+  }
+}
+document.addEventListener('keydown', handleKey);
+
+// Simple Korobeiniki-like music using AudioContext
+function playKorobeiniki() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain).connect(audioCtx.destination);
+  gain.gain.value = 0.2;
+  osc.type = 'sine';
+  osc.start();
+
+  const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88];
+  let i = 0;
+  function playNote() {
+    osc.frequency.setValueAtTime(notes[i % notes.length], audioCtx.currentTime);
+    i++;
+    if (i < notes.length * 4) {
+      setTimeout(playNote, 400);
+    }
+  }
+  playNote();
+}
+
+document.getElementById('startBtn').addEventListener('click', () => {
+  if (!gameStarted) {
+    gameStarted = true;
+    lastDrop = Date.now();
+    playKorobeiniki();
   }
 });
 
