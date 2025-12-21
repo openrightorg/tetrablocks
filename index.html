@@ -199,20 +199,33 @@ function playKorobeiniki() {
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
   osc.connect(gain).connect(audioCtx.destination);
-  gain.gain.value = 0.15;
-  osc.type = 'sawtooth'; // spacey sound
+  gain.gain.value = 0.12;
+  osc.type = 'triangle'; // softer classical feel
   osc.start();
 
-  // Simple arpeggio pattern resembling space game music
-  const pattern = [
-    220, 277, 330, 415, 494, 587, 698, 830, // low to high
-    698, 587, 494, 415, 330, 277, 220, 247, // descending
+  // Classical‑style arpeggio: a simple I–IV–V–I progression in C major
+  const progression = [
+    // C major arpeggio ascending
+    261.63, 329.63, 392.00, 523.25, // C E G C
+    // F major arpeggio ascending
+    349.23, 440.00, 523.25, 698.46, // F A C F
+    // G major arpeggio ascending
+    392.00, 523.25, 659.25, 783.99, // G B D G
+    // Back to C major descending
+    783.99, 659.25, 523.25, 392.00, // G D B A (descending to C)
+    // Repeat to extend length
+    392.00, 523.25, 659.25, 783.99,
+    523.25, 392.00, 261.63, 220.00,
+    261.63, 329.63, 392.00, 523.25,
+    349.23, 440.00, 523.25, 698.46,
+    392.00, 523.25, 659.25, 783.99,
+    783.99, 659.25, 523.25, 392.00,
   ];
-  const duration = 120; // faster tempo
-  let i = 0;
+  const duration = 200; // moderate tempo for classical feel
+  let idx = 0;
   function playNote() {
-    osc.frequency.setValueAtTime(pattern[i % pattern.length], audioCtx.currentTime);
-    i++;
+    osc.frequency.setValueAtTime(progression[idx % progression.length], audioCtx.currentTime);
+    idx++;
     setTimeout(playNote, duration);
   }
   playNote();
