@@ -203,23 +203,34 @@ function playKorobeiniki() {
   osc.type = 'sine';
   osc.start();
 
-  const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88];
-  let i = 0;
+  // Frequencies for a simplified Korobeiniki melody (in Hz)
+  const melody = [
+    392, 392, 392, 587, 523, 493, 440, 392, // G G G D C B A G
+    587, 659, 698, 784, 784, 784, 784, 784, // D E F G G G G G
+  ];
+  const duration = 300; // ms per note
+  let idx = 0;
   function playNote() {
-    osc.frequency.setValueAtTime(notes[i % notes.length], audioCtx.currentTime);
-    i++;
-    if (i < notes.length * 4) {
-      setTimeout(playNote, 400);
-    }
+    osc.frequency.setValueAtTime(melody[idx % melody.length], audioCtx.currentTime);
+    idx++;
+    setTimeout(playNote, duration);
   }
   playNote();
 }
 
 document.getElementById('startBtn').addEventListener('click', () => {
   if (!gameStarted) {
+    // reset game state
+    playfield.forEach(row => row.fill(0));
+    currentPiece = randomShape();
+    nextPiece = randomShape();
+    pos = { x: 3, y: 0 };
+    score = 0;
+    document.getElementById('score').textContent = 'Score: 0';
     gameStarted = true;
     lastDrop = Date.now();
     playKorobeiniki();
+    update(); // start animation loop
   }
 });
 
