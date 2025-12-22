@@ -211,23 +211,24 @@ function playKorobeiniki() {
 
   // Tune: list of {note, duration} where duration is in whole note units
   const TUNE = [
-    {note: 'C4', duration: 0.25}, {note: 'E4', duration: 0.25}, {note: 'G4', duration: 0.25}, {note: 'C5', duration: 0.25},
-    {note: 'F4', duration: 0.25}, {note: 'A4', duration: 0.25}, {note: 'C5', duration: 0.25}, {note: 'F5', duration: 0.25},
-    {note: 'G4', duration: 0.25}, {note: 'B4', duration: 0.25}, {note: 'D5', duration: 0.25}, {note: 'G5', duration: 0.25},
-    {note: 'C5', duration: 0.25}, {note: 'B4', duration: 0.25}, {note: 'G4', duration: 0.25}, {note: 'E4', duration: 0.25},
+    ['C4', 0.25], ['E4', 0.25], ['G4', 0.25], ['C5', 0.25],
+    ['F4', 0.25], ['A4', 0.25], ['C5', 0.25], ['F5', 0.25],
+    ['G4', 0.25], ['B4', 0.25], ['D5', 0.25], ['G5', 0.25],
+    ['C5', 0.25], ['B4', 0.25], ['G4', 0.25], ['E4', 0.25],
     // Repeat to make it longer
-    {note: 'C4', duration: 0.5}, {note: 'E4', duration: 0.5}, {note: 'G4', duration: 0.5}, {note: 'C5', duration: 0.5},
-    {note: 'F4', duration: 0.5}, {note: 'A4', duration: 0.5}, {note: 'C5', duration: 0.5}, {note: 'F5', duration: 0.5},
-    {note: 'G4', duration: 0.5}, {note: 'B4', duration: 0.5}, {note: 'D5', duration: 0.5}, {note: 'G5', duration: 0.5},
-    {note: 'C5', duration: 0.5}, {note: 'B4', duration: 0.5}, {note: 'G4', duration: 0.5}, {note: 'E4', duration: 0.5}
+    ['C4', 0.5], ['E4', 0.5], ['G4', 0.5], ['C5', 0.5],
+    ['F4', 0.5], ['A4', 0.5], ['C5', 0.5], ['F5', 0.5],
+    ['G4', 0.5], ['B4', 0.5], ['D5', 0.5], ['G5', 0.5],
+    ['C5', 0.5], ['B4', 0.5], ['G4', 0.5], ['E4', 0.5]
   ];
 
   const BASE_TIME = 400; // milliseconds per whole note
   let idx = 0;
   function playNext() {
     const entry = TUNE[idx % TUNE.length];
-    osc.frequency.setValueAtTime(NOTE_FREQ[entry.note], audioCtx.currentTime);
-    const dur = BASE_TIME * entry.duration;
+    const note = entry[0];
+    const dur = BASE_TIME * entry[1];
+    osc.frequency.setValueAtTime(NOTE_FREQ[note], audioCtx.currentTime);
     idx++;
     setTimeout(playNext, dur);
   }
