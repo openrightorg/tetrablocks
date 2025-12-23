@@ -37,6 +37,16 @@ const SHAPES = {
   J: [[1,0,0],[1,1,1]],
   L: [[0,0,1],[1,1,1]]
 };
+// Unique color per block type
+const BLOCK_COLORS = {
+  I: '#00ffff',
+  O: '#ffff00',
+  T: '#800080',
+  S: '#00ff00',
+  Z: '#ff0000',
+  J: '#0000ff',
+  L: '#ffa500'
+};
 const SHAPE_KEYS = Object.keys(SHAPES);
 
 function randomShape() {
@@ -63,17 +73,19 @@ function drawField() {
   // draw playfield
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
-      if (playfield[y][x]) {
-        drawCell(x, y, '#888');
+      const cell = playfield[y][x];
+      if (cell) {
+        drawCell(x, y, BLOCK_COLORS[cell]);
       }
     }
   }
   // draw current piece
   const matrix = currentPiece.shape;
+  const color = BLOCK_COLORS[currentPiece.key];
   for (let y = 0; y < matrix.length; y++) {
     for (let x = 0; x < matrix[y].length; x++) {
       if (matrix[y][x]) {
-        drawCell(pos.x + x, pos.y + y, '#f00');
+        drawCell(pos.x + x, pos.y + y, color);
       }
     }
   }
@@ -115,7 +127,7 @@ function merge(field, piece) {
   for (let y = 0; y < m.length; y++) {
     for (let x = 0; x < m[y].length; x++) {
       if (m[y][x]) {
-        field[pos.y + y][pos.x + x] = 1;
+        field[pos.y + y][pos.x + x] = piece.key;
       }
     }
   }
