@@ -99,7 +99,7 @@ function drawNextPiece() {
   for (let y = 0; y < matrix.length; y++) {
     for (let x = 0; x < matrix[y].length; x++) {
       if (matrix[y][x]) {
-        nextCtx.fillStyle = '#f00';
+        nextCtx.fillStyle = BLOCK_COLORS[nextPiece.key];
         nextCtx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
         nextCtx.strokeStyle = '#555';
         nextCtx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
